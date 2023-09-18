@@ -1,0 +1,43 @@
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+public class MorseCodeConverter {
+    static MorseCodeTree morseCodeTree = new MorseCodeTree();
+    public static String convertToEnglish(File codeFile) throws FileNotFoundException {
+        if (!codeFile.exists()) {
+            return "";
+        }
+        Scanner fileReader = new Scanner(codeFile);
+        StringBuilder codeBuilder = new StringBuilder();
+        while (fileReader.hasNextLine()) {
+            String line = fileReader.nextLine().trim();
+            if (!line.isEmpty()) {
+                codeBuilder.append(line).append(" ");
+            }
+        }
+        fileReader.close();
+        String code = codeBuilder.toString().trim();
+        return convertToEnglish(code);
+
+    }
+    public static String convertToEnglish(String code) {
+        StringBuilder english = new StringBuilder();
+        String[] codeArr = code.split(" ");
+        for (String codeWord : codeArr) {
+            if (codeWord.equals("/")) {
+                english.append(" ");
+            } else {
+                String englishLetter = morseCodeTree.fetch(codeWord);
+                english.append(englishLetter);
+            }
+        }
+        return english.toString();
+    }
+
+    public static String printTree() {
+        StringBuilder printsTree = new StringBuilder();
+        for (String object : morseCodeTree.toArrayList())
+            printsTree.append(object).append(" ");
+        return printsTree.toString().trim();
+    }
+}
