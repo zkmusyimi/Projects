@@ -1,0 +1,812 @@
+//
+//  Created by Zachary Musyimi on 2/8/22.
+/*
+
+
+ */
+#include "yhyh.h"
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <cmath>
+#include <array>
+#include <stdlib.h>
+#include "yhyh.h"
+
+using namespace std;
+const int CAP = 20;
+string isbn[CAP] = {"11", "1290060888695", "1380060888695", "1490060888695", "", "1580060888695", "1680060888695", "1780060888695", "1880060888695", "1980060888695", "2080060888695", "21", "2280060888695", "2380060888695", "", "2480060888695","2580060888695", "2680060888695", "2780060888695", "2880060888695"};
+
+string title[CAP] = {"To Kill A Mockingbird", "Pride and Prejudice", "The Catcher in the Rye", "The Great Gatsby", "", "One Hundred Years of Solitude", "The Blind Assassin", "48 Laws of Power", "The Known World", "Never Let Me Go", "Suite française", "Special Topics In Calamity physics", "Cutting for Stone", "Say you're one of them", "", "The Lord of the Rings", "The Orphan Master's Son", "Beautiful Ruins", "1984", "Ulysses"};
+
+string author[CAP] = {"Harper Lee", "Jane Austen", "J.D. Salinger", "F. Scott Fitzgerald", "", "Gabriel Garcia Marquez", "Margaret Atwood", "Robert Greene", "Edward P Johnes", "Kazuo Ishiguro", "Irene Nemirovsky", "Marisha Pressl", "Abraham Verghese", "Uwem Akpan", "", "J. R. R. Tolkien", "Adam Johnson","Jess Walter", "George Orwell", "James Joyce"};
+
+string publisher[CAP] = {"J. B. Lippincott & Co.", "T. Egerton, Whitehall", "Little, Brown", "Charles Scribner's Sons.", "", "Sudamericana Press", "McClelland and Stewart", "Viking Press", "Amistad Press", "Faber and Faber", "Denoel", "Viking Press", "Alfred A. Knopf", "Little Brown", "", "Allen & Unwin", "Random House", "Harper", "Secker & Warburg", "Shakespeare and Company"};
+
+string inventoryDate[CAP] = {"07/11/2000", "01/28/2000", "07/16/2000", "04/10/2000", "", "05/05/2000", "09/02/2000", "10/22/2000", "09/08/2000", "04/19/2000", "10/31/2000", "05/13/2000", "02/22/2000", "01/03/2000","", "07/29/2000", "09/16/2000", "04/02/2000", "06/08/2000", "02/02/2000"};
+
+int quantity[CAP] = {7, 5, 9, 11, 0 ,19, 17, 18, 20, 33, 22, 25, 27, 26, 0, 29, 33, 31, 37, 35};
+
+double wholesaleCost[CAP] = {30, 37, 20, 33, 51, 0 ,98, 65, 72, 70, 86, 93, 88, 107, 114, 0, 121, 120, 119, 149};
+
+double retailCost[CAP] = {127, 333, 232, 111, 0, 234, 400, 330, 130, 289, 209, 142, 200, 365, 0, 212, 373, 300, 247, 169};
+double totalWholesaleCost = 0;
+double totalRetailCost = 0;
+
+
+enum options {cashierModule = 1, inventoryDatabaseModule = 2, reportModule = 3, exitCode = 4};
+enum options1 {inventoryListing = 1, inventoryWholesale = 2, inventoryRetail = 3, listingByQuantity = 4, listingByCost = 5, listingByAge = 6 , mainMenu = 7};
+enum options2 {lookUpABook = 1, addABook = 2, editABook = 3, deleteABook = 4, mainmenu = 5};
+int main() {
+
+  
+   
+    double total = 0;
+    double newTotal = 0;
+    double finalCost = 0;
+   
+   // double orderedDate[20];
+    //double orderedDate[20];
+    cout << "Serendipty Booksellers" << endl;
+    cout << setw(15) << "Main Menu" << endl;
+    cout << endl;
+    cout << "1. Cashier Module" << endl;
+    cout << "2. Inventory Database Module" << endl;
+    cout << "3. Report Module" << endl;
+    cout << "4. Exit" << endl;
+    cout << "Enter Your Choice: ";
+    int choice = 0;
+    cin >> choice;
+    while (choice < 1 || choice > 4 ){
+        // Input Validation
+        cout << "Please enter a number in the range 1 - 4" << endl;
+        cin >> choice;
+        switch (choice){
+            case cashierModule:
+            cout << "You selected item " << choice << "." << endl;
+                // Call cashier function
+                cashier(total, finalCost, newTotal, retailCost, quantity);
+                exit(-1);
+                break;
+            case inventoryDatabaseModule:
+                cout << "You selected item " << choice << "." << endl;
+                // Call inventory menu function
+                invmenu();
+                exit(-1);
+                break;
+            case reportModule:
+                cout << "You selected item " << choice << "." << endl;
+                // Call reports function
+                reports();
+                exit(-1);
+                break;
+            case exitCode:
+                cout << "You selected item " << choice << "." << endl;
+                exit(-1);
+                break;
+        }
+    }
+    while (choice <= 4 || choice >= 1){
+        switch (choice){
+            case cashierModule:
+            cout << "You selected item " << choice << "." << endl;
+                // Call cashier function
+                cashier(total, finalCost, newTotal, retailCost, quantity);
+                exit(-1);
+                break;
+            case inventoryDatabaseModule:
+                cout << "You selected item " << choice << "." << endl;
+                // Call inventory menu function
+                invmenu();
+                exit(-1);
+                break;
+            case reportModule:
+                cout << "You selected item " << choice << "." << endl;
+                // Call reports function
+                reports();
+                exit(-1);
+                break;
+            case exitCode:
+                cout << "You selected item " << choice << "." << endl;
+                exit(-1);
+                break;
+        }
+    }
+    
+}
+
+
+void bookinfo(int i) {
+    cout << "Book in inventory" << endl;
+    cout << "Serendipty Booksellers" << endl;
+    cout << setw(20) << "Book Information" << endl;
+    cout << "\n";
+    for (int i = 0; i < CAP; i++){
+    cout << "ISBN: " << isbn[i] << endl;
+    cout << "Title: " << title[i] << endl;
+    cout << "Author: " << author[i] << endl;
+    cout << "Publisher: " << publisher[i] << endl;
+    cout << "Date Added: " << inventoryDate[i] << endl;
+    cout << "Quantity on Hand: " << quantity[i] << endl;
+    cout << "Wholesale Cost: " << wholesaleCost[i] << endl;
+    cout << "Retail Price: " << retailCost[i] << endl;
+    }
+}
+
+
+void editBook(){
+   // CAP = 20;
+    cout << "You selected Edit Book" << endl;
+    string lookUpTitle;
+    cout << "Enter the title: ";
+    cin.ignore();
+    getline(cin, lookUpTitle);
+
+    string changeField;
+    string newIsbn;
+    string newTitle;
+    string newAuthor;
+    string newPublisher;
+    string newInventoryDate;
+    int newQuantity;
+    double newWholesaleCost;
+    double newRetailCost;
+            for (int i = 0; i < CAP; i++){
+                while (title[i] == lookUpTitle){
+                    bookinfo(i);
+                    cout << "What field would you to change?" << endl;
+                    getline(cin, changeField);
+                    if (changeField == "isbn"){
+                        cout << "Enter new ISBN: ";
+                        cin >> newIsbn;
+                        cin.ignore();
+                        isbn[i] = newIsbn;
+                        bookinfo(i);
+                        invmenu();
+                        
+                    } else if (changeField == "publisher"){
+                        cout << "Enter new Publisher: ";
+                       // cin.ignore();
+                        getline(cin, newPublisher);
+                       // cin.ignore();
+                        publisher[i] = newPublisher;
+                        bookinfo(i);
+                        invmenu();
+                    } else if (changeField == "title"){
+                        cout << "Enter new Title: ";
+                        getline(cin, newTitle);
+                        title[i] = newTitle;
+                        bookinfo(i);
+                        invmenu();
+                        
+                    }
+                    else if (changeField == "author"){
+                    cout << "Enter new author: ";
+                        getline(cin, newAuthor);
+                    author[i] = newAuthor;
+                        bookinfo(i);
+                        invmenu();
+                        
+                    } else if (changeField == "inventory date"){
+                        cout << "Enter new inventory Date: ";
+                        getline(cin, newInventoryDate);
+                        inventoryDate[i] = newInventoryDate;
+                        bookinfo(i);
+                        invmenu();
+                        
+                    } else if (changeField == "quantity"){
+                        cout << "Enter new quantity: ";
+                        cin >> newQuantity;
+                        quantity[i] = newQuantity;
+                        bookinfo(i);
+                        invmenu();
+                        
+                    } else if (changeField == "wholesale cost"){
+                        cout << "Enter new whole sale cost: ";
+                        cin >> newWholesaleCost;
+                        wholesaleCost[i] = newWholesaleCost;
+                        bookinfo(i);
+                        invmenu();
+                        
+                    } else if (changeField == "retail cost"){
+                        cout << "Enter new retail cost: ";
+                        cin >> newRetailCost;
+                        retailCost[i] = newRetailCost;
+                        bookinfo(i);
+                        invmenu();
+                        
+                    } else {
+                        invmenu();
+                        
+                    }
+                    
+            
+                    
+                }
+    }
+}
+
+void addBook(){
+   
+   // CAP = 20;
+     string lookUpTitle;
+     cout << "You selected Add Book" << endl;
+    for (int i = 0; i <= CAP; i++){
+        while (title[i] == ""){
+            cout << "Slot " << i + 1 << " is open" << endl;
+            cout << "Date: ";
+            cin >> inventoryDate[i];
+          
+            cout << "Title: ";
+            cin.ignore();
+            getline(cin, title[i]);
+    
+          
+            cout << "Quantity of Books: ";
+            cin >> quantity[i];
+
+           
+            cout << "Author's Name: ";
+            cin.ignore();
+            getline(cin, author[i]);
+          
+          
+            cout << "Publisher's Name: ";
+            getline(cin, publisher[i]);
+            
+            
+            cout << "Wholesale Cost of the book: ";
+            cin >> wholesaleCost[i];
+            
+            cout << "ISBN: ";
+            cin.ignore();
+            getline(cin, isbn[i]);
+            
+
+            cout << "Retail Price of the book: ";
+            cin >> retailCost[i];
+            
+            char repeat;
+            cout << "Do you want to fill another slot? (y/n)";
+            cin >> repeat;
+            while (repeat != 'y'){
+                invmenu();
+                
+            }
+        }
+        
+}
+    cout << "There are no more empty slots." << endl;
+    invmenu();
+}
+// delete book File
+void deleteBook(){
+  //  CAP = 20;
+
+    string lookUpTitle;
+    cout << "You selected Deleted Book" << endl;
+    cout << "Enter the title: ";
+    cin.ignore();
+    getline(cin, lookUpTitle);
+    char deleteBook;
+    for (int i = 0; i < CAP; i++){
+        while (title[i] == lookUpTitle){
+            bookinfo(i);
+            cout << "Are you sure you want to delete this book's data (y/n)" << endl;
+            cin >> deleteBook;
+            if (deleteBook == 'y'){
+                title[i] = "";
+                isbn[i] = "";
+                author[i] = "";
+                publisher[i] = "";
+                inventoryDate[i] = "";
+                quantity[i] = 0;
+                wholesaleCost[i] = 0;
+                retailCost[i] = 0;
+                bookinfo(i);
+                invmenu();
+}
+            else {
+                bookinfo(i);
+                invmenu();            }
+        }
+    }
+}
+
+void lookupBook(){
+    bool trueOrFalse = false;
+   // CAP = 20;
+    string lookUpTitle = "";
+    cout << "Enter the title: ";
+    cin.ignore();
+    getline(cin, lookUpTitle);
+   
+  
+            for (int i = 0; i < CAP; i++){
+                if (title[i] == lookUpTitle){
+                    trueOrFalse = true;
+                }
+                while (trueOrFalse == true){
+                    bookinfo(i);
+                    invmenu();
+            }
+    
+     
+    }
+                   // while (trueOrFalse == false){
+                    cout << "Book is not in the inventory" << endl;
+                   // exit(-1);
+                    }
+void invmenu() {
+    // Formatting
+    cout << "Serendipty Booksellers" << endl;
+    cout << setw(20) << "Inventory Database" << endl;
+    cout << "1. Look Up a Book" << endl;
+    cout << "2. Add a Book" << endl;
+    cout << "3. Edit a Book's Record" << endl;
+    cout << "4. Delete a Book" << endl;
+    cout << "5. Return to the Main Menu" << endl;
+    cout << "\n";
+    int choice;
+    cout << "Enter Your Choice: ";
+    cin >> choice;
+    while (choice < 1 || choice > 5 ){
+        // Input Validation
+        cout << "Please enter a number in the range 1 - 5" << endl;
+        cin >> choice;
+        // Select and go to what the user chooses
+        switch (choice){
+                    case lookUpABook:
+                lookupBook();
+                        break;
+                    case addABook:
+                        addBook();
+                        break;
+                    case editABook:
+                        editBook();
+                        break;
+                    case deleteABook:
+                        deleteBook();
+                    case mainmenu:
+                    main();
+                
+                        break;
+                }
+        }
+    while (choice <= 5 || choice >= 1){
+        switch(choice){
+            case lookUpABook:
+                lookupBook();
+                break;
+            case addABook:
+                addBook();
+                break;
+            case editABook:
+                editBook();
+                break;
+            case deleteABook:
+                deleteBook();
+            case mainmenu:
+                main();
+                break;
+            default:
+                break;
+        }
+    }
+     
+}
+
+               
+
+    
+
+
+
+void cashier(double total, double finalCost, double newTotal, double retailCost[],int quantity[]) {
+//string date;
+  
+        const int CAP = 20;
+    string lookUpIsbn;
+    bool trueOrFalse = false;
+    int enteredQuantity = 0;
+   
+    float price = 0.0;
+    double subtotal = 0;
+    double productsTax = 0;
+    const float TAX = 1.06;
+    char repeat;
+    
+    cout << "Serendipty Book Sellers" << endl;
+    cout << setw(17) << "Cashier Module" << endl;
+    cout << "\n";
+   
+        cout << "ISBN: ";
+    cin.ignore();
+        getline(cin, lookUpIsbn);
+       
+            for (int j = 0; j < CAP; j++){
+            while (lookUpIsbn == isbn[j]){
+                trueOrFalse = true;
+                cout << "Quantity: ";
+                cin >> enteredQuantity;
+                cout << endl;
+                
+              if (enteredQuantity > quantity[j]){
+                  cout << "Not enough copies." << endl;
+                  main();
+                }
+                while (trueOrFalse == true){
+                    quantity[j] -= enteredQuantity;
+                    subtotal = enteredQuantity * retailCost[j];
+                    productsTax = subtotal * 0.06;
+                        total = subtotal * TAX;
+                        newTotal += total;
+                    cout << "Title: " << title[j] << endl;
+                    cout << "Quantity in stock: " << quantity[j] << endl;
+                    cout << "Subtotal" << setw(20) << "$ " << subtotal << endl;
+                    cout << "Tax" << setw(25) << "$ " << productsTax << endl;
+                    cout << "Total" << setw(23) << "$ " << total << endl;
+                    cout << "Do you have another book to enter?(y/n)" << endl;
+                    cin >> repeat;
+                    if (repeat == 'y'){
+                        cashier(total, finalCost, newTotal, retailCost, quantity);
+                    } else {
+                        cout << "Your final cost is " << newTotal << endl;
+                        cout << "Thank You for Shopping at Serendipity!" << endl;
+                        main();
+                }
+            }
+            }
+            }
+                while (trueOrFalse == false){
+                            cout << "Could not locate the ISBN number." << endl;
+                            cout << "Would you like the try again?(y/n)" << endl;
+                            cin >> repeat;
+                            if (repeat == 'y'){
+                                cashier(total, finalCost, newTotal, retailCost, quantity);
+                            } else {
+                                
+                        cout << "Your final cost is " << newTotal << endl;
+                        cout << "Thank You for Shopping at Serendipity!" << endl;
+                                main();
+                        }
+                }
+                    
+    cout << "Serendipty Book Sellers" << endl;
+    cout << "\n";
+   
+    cout << enteredQuantity << setw(30);
+    cout << isbn << setw(30);
+    cout << title << setw(25);
+    cout << price << setw(25);
+    cout << subtotal;
+    cout << "\n" << "\n";
+    cout << "Subtotal" << setw(20) << "$ " << subtotal << endl;
+    cout << "Tax" << setw(25) << "$ " << productsTax << endl;
+    cout << "Total" << setw(23) << "$ " << total << endl;
+    cout << "\n";
+    cout << "Do you have another transaction to be process?(y/n)" << endl;
+    
+    cout << "Your final cost is " << newTotal << endl;
+    cout << "Thank You for Shopping at Serendipity!" << endl;
+    
+}
+
+
+
+
+void repWholesale(){
+    double totalWholesaleCost = 0;
+   for (int p = 0; p < CAP; p++){
+        if (title[p] != ""){
+    cout << "Date Added: " << inventoryDate[p] << endl;
+    cout << "Title: " << title[p] << endl;
+    cout << "ISBN: " << isbn[p] << endl;
+    cout << "Quantity on Hand: " << quantity[p] << endl;
+    cout << "Wholesale Cost: " << wholesaleCost[p] << endl;
+        cout << endl;
+            double wholesaleQuantity = quantity[p] * wholesaleCost[p];
+            totalWholesaleCost += wholesaleQuantity;
+            
+        }
+    
+        
+    }
+    cout << "Total Wholesale Value: "  << totalWholesaleCost << endl;
+
+}
+
+void repRetail(){
+   cout << "You selected Inventory Retail Value" << endl;
+    double totalRetailCost = 0;
+    for (int p = 0; p < CAP; p++){
+        if (title[p] != ""){
+    cout << "Date Added: " << inventoryDate[p] << endl;
+    cout << "Title: " << title[p] << endl;
+    cout << "ISBN: " << isbn[p] << endl;
+    cout << "Quantity on Hand: " << quantity[p] << endl;
+    cout << "Wholesale Cost: " << retailCost[p] << endl;
+        cout << endl;
+            double retailQuantity = quantity[p] * retailCost[p];
+            totalRetailCost += retailQuantity;
+            
+        }
+       
+        
+    }
+    cout << "Total Retail Value: "  << totalRetailCost << endl;
+
+}
+void repQty(){
+
+    int id[CAP];
+    int *idPtr[CAP];
+    int *qtyPtr[CAP];
+ 
+    for (int i = 0; i < CAP; i++){
+        id[i] = i;
+        idPtr[i] = &id[i];
+        qtyPtr[i] = &quantity[i];
+    }
+    
+        int start;
+        int maxIndex;
+        int *tempId;
+        int *maxValue;
+    
+    for (start = 0; start < CAP - 1; start++){
+        
+        maxIndex = start;
+        maxValue = qtyPtr[start];
+        tempId = idPtr[start];
+        for (int index = start + 1; index < CAP; index++){
+            if (*(qtyPtr[index]) > *maxValue){
+                maxValue = qtyPtr[index];
+                tempId = idPtr[index];
+                maxIndex = index;
+            }
+        }
+        qtyPtr[maxIndex] = qtyPtr[start];
+        idPtr[maxIndex] = idPtr[start];
+        qtyPtr[start] = maxValue;
+        idPtr[start] = tempId;
+    
+    
+    }
+        string date;
+        cout << "Enter date:" << endl;
+        cin.ignore();
+        getline(cin,date);
+    for (int j = 0; j < CAP; j++){
+        if (isbn[*(idPtr[j])] != ""){
+            cout << "Title: " << title[*(idPtr[j])] << endl;
+            cout << "ISBN: " << isbn[*(idPtr[j])] << endl;
+            cout << "Quantity: " << *qtyPtr[j] << endl;
+        }
+    }
+    cout << "Press enter to continue" << endl;
+    cin.ignore();
+    cin.get();
+    
+    }
+
+
+void repCost(){
+    int id[CAP];
+    int *idPtr[CAP];
+    double *wholesaleCostPtr[CAP];
+ 
+    for (int i = 0; i < CAP; i++){
+        id[i] = i;
+        idPtr[i] = &id[i];
+        wholesaleCostPtr[i] = &wholesaleCost[i];
+    }
+    
+        int start;
+        int maxIndex;
+        int *tempId;
+        double *maxValue;
+    
+    for (start = 0; start < CAP - 1; start++){
+        
+        maxIndex = start;
+        maxValue = wholesaleCostPtr[start];
+        tempId = idPtr[start];
+        for (int index = start + 1; index < CAP; index++){
+            if (*(wholesaleCostPtr[index]) > *maxValue){
+                maxValue = wholesaleCostPtr[index];
+                tempId = idPtr[index];
+                maxIndex = index;
+            }
+        }
+        wholesaleCostPtr[maxIndex] = wholesaleCostPtr[start];
+        idPtr[maxIndex] = idPtr[start];
+        wholesaleCostPtr[start] = maxValue;
+        idPtr[start] = tempId;
+    
+    
+    }
+        string date;
+        cout << "Enter date:" << endl;
+        cin.ignore();
+        getline(cin,date);
+    for (int j = 0; j < CAP; j++){
+        if (isbn[*(idPtr[j])] != ""){
+            cout << "Title: " << title[*(idPtr[j])] << endl;
+            cout << "ISBN: " << isbn[*(idPtr[j])] << endl;
+            cout << "Quantity: " << quantity[j] << endl;
+            cout << "Wholesale Cost: " << *wholesaleCostPtr[j] << endl;
+           
+        }
+    }
+    cout << "Press enter to continue" << endl;
+    cin.ignore();
+    cin.get();
+    }
+   
+
+void repAge(){
+
+    int id[CAP];
+    int *idPtr[CAP];
+    string *orderedDatePtr[CAP];
+ 
+    for (int i = 0; i < CAP; i++){
+        id[i] = i;
+        idPtr[i] = &id[i];
+        orderedDatePtr[i] = &inventoryDate[i];
+    }
+    
+        int start;
+        int maxIndex;
+        int *tempId;
+        string *maxValue;
+    
+    for (start = 0; start < CAP - 1; start++){
+        
+        maxIndex = start;
+        maxValue = orderedDatePtr[start];
+        tempId = idPtr[start];
+        for (int index = start + 1; index < CAP; index++){
+            if (*(orderedDatePtr[index]) > *maxValue){
+                maxValue = orderedDatePtr[index];
+                tempId = idPtr[index];
+                maxIndex = index;
+            }
+        }
+        orderedDatePtr[maxIndex] = orderedDatePtr[start];
+        idPtr[maxIndex] = idPtr[start];
+        orderedDatePtr[start] = maxValue;
+        idPtr[start] = tempId;
+    
+    
+    }
+        string date;
+        cout << "Enter date:" << endl;
+        cin.ignore();
+        getline(cin,date);
+    for (int j = 0; j < CAP; j++){
+        if (isbn[*(idPtr[j])] != ""){
+            cout << "Title: " << title[*(idPtr[j])] << endl;
+            cout << "ISBN: " << isbn[*(idPtr[j])] << endl;
+            cout << "Quantity: " << quantity[j] << endl;
+            cout << "Wholesale Cost: " << *orderedDatePtr[j] << endl;
+           
+        }
+    }
+    cout << "Press enter to continue" << endl;
+    cin.ignore();
+    cin.get();
+}
+void repListing(){
+   cout << "You selected Inventory Listing" << endl;
+    for (int i = 0; i < CAP; i++){
+        cout << title[i] << endl;
+        cout << "Author: " << author[i] << endl;
+    cout << "Publisher: " << publisher[i] << endl;
+    cout << "Date Added: " << inventoryDate[i] << endl;
+    cout << "Quantity on Hand: " << quantity[i] << endl;
+    cout << "Wholesale Cost: " << wholesaleCost[i] << endl;
+    cout << "Retail Price: " << retailCost[i] << endl;
+        cout << endl;
+    
+    }
+    
+}
+
+void reports() {
+    // Formatting
+    cout << "Serendipty Booksellers" << endl;
+    cout << setw(15) << "Reports" << endl;
+    cout << "1. Inventory Listing" << endl;
+    cout << "2. Inventory Wholesale Value" << endl;
+    cout << "3. Inventory Retail Value" << endl;
+    cout << "4. Listing by Quantity" << endl;
+    cout << "5. Listing by Cost" << endl;
+    cout << "6. Listing by Age" << endl;
+    cout << "7. Return to Main Menu" << endl;
+    cout << "\n";
+    int choice;
+    cout << "Enter Your Choice: ";
+    cin >> choice;
+    while (choice < 1 || choice > 7 ){
+        //  Input validation
+        cout << "Please enter a number in the range 1 - 7: ";
+        cin >> choice;
+        // Go to module chosen
+        switch (choice){
+            case inventoryListing:
+            cout << "You selected item " << choice << "." << endl;
+               repListing();
+                reports();
+                break;
+            case inventoryWholesale:
+                cout << "You selected item " << choice << "." << endl;
+               repWholesale();
+                reports();
+                break;
+            case inventoryRetail:
+                cout << "You selected item " << choice << "." << endl;
+               repRetail();
+                reports();
+                break;
+            case 4:
+                cout << "You selected item " << choice << "." << endl;
+                repQty();
+               reports();
+                break;
+            case listingByCost:
+                cout << "You selected item " << choice << "." << endl;
+                repCost();
+                 reports();
+                break;
+            case listingByAge:
+                cout << "You selected item " << choice << "." << endl;
+                repAge();
+                reports();
+                break;
+                // Return to Main Menu
+            case mainMenu:
+                cout << "You selected item " << choice << "." << endl;
+                main();
+                break;
+        }
+    }
+    while (choice <= 7 || choice >= 1){
+        switch (choice){
+            case inventoryListing:
+            cout << "You selected item " << choice << "." << endl;
+            repListing();
+                reports();
+                break;
+            case inventoryWholesale:
+                cout << "You selected item " << choice << "." << endl;
+                repWholesale();
+                reports();
+                break;
+            case inventoryRetail:
+                cout << "You selected item " << choice << "." << endl;
+                repRetail();
+                 reports();
+                break;
+            case listingByQuantity:
+                cout << "You selected item " << choice << "." << endl;
+                repQty();
+              reports();
+                break;
+            case listingByCost:
+                cout << "You selected item " << choice << "." << endl;
+               repCost();
+                reports();
+              break;
+            case listingByAge:
+                repAge();
+                reports();
+                break;
+            case mainMenu:
+                cout << "You selected item " << choice << "." << endl;
+                main();
+                break;
+        }
+    }
+}
